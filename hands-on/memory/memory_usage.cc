@@ -90,3 +90,21 @@ uint64_t memory_usage::totlive()
    mallctl("stats.active",  & stats, & stats_s, nullptr, 0);
    return stats;
 }
+
+#include<ostream>
+#include<fstream>
+// see man proc
+void memory_usage::statm::fill() {
+  std::ifstream f("/proc/self/statm");
+  long long dummy;
+  f >> vss >> rss >> shared >> text >> dummy >> data;
+};
+
+std::ostream& memory_usage::statm::print(std::ostream & co) const {
+  co << "vss " << vss
+     << ", rss " << rss
+     << ", shared " << shared
+     << ", text " << text
+     << ", data " << data;
+  return co;
+}

@@ -4,7 +4,6 @@
 #include<iostream>
 #include<cstdint>
 #include<vector>
-#include<array>
 #include<memory>
 #include<chrono>
 
@@ -16,11 +15,9 @@ void stop(const char * m) {
   auto delta = std::chrono::high_resolution_clock::now()-start;
   std::cout << m;
   std::cout << " elapsted time " << std::chrono::duration_cast<std::chrono::nanoseconds>(delta).count() << std::endl;
-  std::cout << "allocated so far " << memory_usage::allocated();
+  std::cout << " allocated so far " << memory_usage::allocated();
   std::cout << " deallocated so far " << memory_usage::deallocated() << std::endl;
   std::cout << "total live " << memory_usage::totlive() << std::endl;
-  memory_usage::statm statm; statm.fill();
-  std::cout << "statm "; statm.print(std::cout) << std::endl;
   char c;
   std::cout << "continue?";
   std::cin  >> c;
@@ -30,6 +27,7 @@ void stop(const char * m) {
 
 
 void __attribute__ ((noinline))
+
 touch(int * v, uint32_t size) {
 
   auto stride = std::max(1U,size/100);
@@ -63,7 +61,7 @@ struct W {
 };
 
 
-void cppVectorResize(size_t N) { 
+void cppVector(size_t N) { 
 
     std::vector<int> v;
     v.reserve(N);
@@ -102,14 +100,25 @@ int main() {
 
   stop("start");
 
+#ifdef TEST_STACK
+  f(0);
+  stop("after f(0)");
+  f(100);
+  stop("after f(100)");
+  f(10000);
+  stop("after f(10000)");
+  f(50);
+  stop("after f(50)");
+#endif
+
   constexpr size_t N = 200*1000*1000;
 
   cArray(N/2);
   stop("after cArray");
-  cppVectorFill(N);
+  cppVector(N);
+  stop("after cppVector");
+  cppVectorFill(2*N);
   stop("after cppFill");
-  cppVectorResize(N);
-  stop("after cppVectorResize");
   
   stop("stop");
 
