@@ -14,17 +14,18 @@ auto start = std::chrono::high_resolution_clock::now();
 
 void stop(const char * m) {
   auto delta = std::chrono::high_resolution_clock::now()-start;
+  std::cout.imbue(std::locale("en_US.UTF8"));
   std::cout << m;
   std::cout << " elapsted time " << std::chrono::duration_cast<std::chrono::nanoseconds>(delta).count() << std::endl;
   std::cout << "allocated so far " << memory_usage::allocated();
-  std::cout << " deallocated so far " << memory_usage::deallocated() << std::endl;
-  std::cout << "total live " << memory_usage::totlive() << std::endl;
+  std::cout << " deallocated so far " << memory_usage::deallocated() << " bytes" << std::endl;
+  std::cout << "total live " << memory_usage::totlive() << " bytes" << std::endl;
   memory_usage::statm statm; statm.fill();
   std::cout << "statm "; statm.print(std::cout) << std::endl;
   char c;
   std::cout << "continue?";
   std::cin  >> c;
-
+  std::cout.imbue(std::locale());
   start = std::chrono::high_resolution_clock::now();
 }
 
@@ -97,6 +98,10 @@ void cppVectorFill(size_t N) {
 
 
 int main() {
+
+  // set locale to print large numbers with commas
+  std::locale::global(std::locale("en_US.UTF8"));
+  std::cout.imbue(std::locale());
 
   std::cout << "jemalloc counters are " << (memory_usage::is_available() ? "" : "NOT ") << "available" << std::endl;
 

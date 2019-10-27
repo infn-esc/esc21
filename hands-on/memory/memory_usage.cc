@@ -105,6 +105,6 @@ std::ostream& memory_usage::statm::print(std::ostream & co) const {
      << ", rss " << rss
      << ", shared " << shared
      << ", text " << text
-     << ", data " << data;
+     << ", data " << data << " kB";
   return co;
 }
