@@ -10,7 +10,7 @@ The CUDA Runtime API reference manual is a very useful source of information:
 <a href="http://docs.nvidia.com/cuda/cuda-runtime-api/index.html" target="_blank">http://docs.nvidia.com/cuda/cuda-runtime-api/index.html</a>
 
 ```bash
-$ cd esc19/hands-on/cuda_exercises
+$ cd esc21/hands-on/cuda_exercises
 ```
 
 
@@ -27,7 +27,7 @@ Cuda compilation tools, release 10.1, V10.1.243
 
 Compile and run the `deviceQuery` application:
 ~~~
-$ cd esc19/hands-on/cuda_exercises/utils/deviceQuery
+$ cd esc21/hands-on/cuda_exercises/utils/deviceQuery
 $ make
 ~~~
 

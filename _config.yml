@@ -1,7 +1,7 @@
 highlighter: rouge
-baseurl: /esc19
-menu_header: ESC19
-exercises_repo: https://github.com/infn-esc/esc19/blob/master
+baseurl: /esc21
+menu_header: ESC21
+exercises_repo: https://github.com/infn-esc/esc21/blob/master
 menu:
   -
     name: basic

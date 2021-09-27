@@ -99,7 +99,7 @@ Please note that:
 
 All the school hands-on material is included in a git repository. Get it using:
 
-    [student@esc ~]$ git clone https://github.com/infn-esc/esc19.git esc
+    [student@esc ~]$ git clone https://github.com/infn-esc/esc21.git esc
 
 The repository contains also these pages.
 
