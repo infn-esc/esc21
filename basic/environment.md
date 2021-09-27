@@ -3,22 +3,24 @@ title: School exercise environment
 layout: main
 ---
 
-The goal of this step is for you to get famili with the ESC working
+The goal of this step is for you to get familiar with the ESC working
 environment and check that everything is correctly set up for the
 school exercises.
 
 If something doesn't work as expected, please ask one of the
 organizers.
 
-When using these computing resources you agree to comply with the "Acceptable
-Use Policy" of INFN-CNAF, available
-in [Italian](https://www.cnaf.infn.it/wp-content/uploads/2016/10/AUP_it.pdf)
-and [English](https://www.cnaf.infn.it/wp-content/uploads/2016/10/AUP_en.pdf)
+When using these computing resources you agree to comply with the "Regulation on the use of INFN computing resources",
+available in [Italian](https://www.cnaf.infn.it/wp-content/uploads/2020/03/Disciplinare_2020_IT.pdf) and
+[English](https://www.cnaf.infn.it/wp-content/uploads/2020/03/Disciplinare_2020_EN.pdf). Please read also the "General
+information note on processing of personal data by INFN", available in
+[Italian](https://dpo.infn.it/wp-content/uploads/2019/01/Informativa_generale_INFN_181204.pdf) and
+[English](https://dpo.infn.it/wp-content/uploads/2020/07/Informativa_generale_181204_EN.pdf).
 
 ## Wi-Fi access
 
 Make sure you are using the INFN-Captive WiFi or eduroam networks and
-not the CEUB WiFi network. Only the INFN-Captive and eduroam networks
+**not** the CEUB WiFi network. Only the INFN-Captive and eduroam networks
 will allow to connect to the ESC computers.
 
 ## SSH access to school computers
@@ -32,10 +34,12 @@ To log on the computers prepared for the School, you have to go first through a
 gateway, named `bastion.cnaf.infn.it`, with the username and password of
 `student`.
 
-	[me@mylaptop ~]$ ssh -XA student@bastion.cnaf.infn.it
-	student@bastion.cnaf.infn.it's password:
-	Last login: ...
-	[student@bastion ~]$
+```shell
+[me@mylaptop ~]$ ssh -XA student@bastion.cnaf.infn.it
+student@bastion.cnaf.infn.it's password:
+Last login: ...
+[student@bastion ~]$
+```
 
 The `-X` option forwards the X11 display. The `-A` option forwards the SSH agent.
 
@@ -51,17 +55,20 @@ see if there are differences.
 The names of the machines are awful, we know, but you can get around it by
 creating a config file for ssh on the `bastion` host, for example:
 
-	[student@bastion ~]$ cat .ssh/config
-    ForwardX11 yes
-    ForwardAgent yes
+```shell
+[student@bastion ~]$ cat .ssh/config
+Host esc
+  Hostname hpc-201-11-40.cr.cnaf.infn.it
 
-    Host esc
-    Hostname hpc-201-11-40.cr.cnaf.infn.it
-    
-    [student@bastion ~]$ ssh esc
-    student@hpc-201-11-40.cr.cnaf.infn.it's password:
-    Last login: ...
-	[student@hpc-201-11-40 ~]$
+Host *
+  ForwardX11 yes
+  ForwardAgent yes
+
+[student@bastion ~]$ ssh esc
+student@hpc-201-11-40.cr.cnaf.infn.it's password:
+Last login: ...
+[student@hpc-201-11-40 ~]$
+```
 
 In the following, when you see `esc`, it means one of the servers.
 
