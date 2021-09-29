@@ -26,7 +26,7 @@ will allow to connect to the ESC computers.
 ## SSH access to school computers
 
 You have been assigned a personal account, with a username of the form
-`studentNM`, where `NM` is a number between 01 and 30. In the following,
+`studentNM`, where `NM` is a number between 34 and 55. In the following,
 when you see `student`, replace it with your personal account. You
 should also have received the corresponding password.
 
@@ -75,22 +75,26 @@ In the following, when you see `esc`, it means one of the servers.
 To further simplify the login from `bastion` to `esc`, you may create an SSH key
 on `bastion` and register it on `esc`:
 
-	[student@bastion ~]$ ssh-keygen
-    Generating public/private rsa key pair.
-    Enter file in which to save the key (/home/HPC/student/.ssh/id_rsa):
-    Enter passphrase (empty for no passphrase):
-    Enter same passphrase again:
-    ...
-	[student@bastion ~]$ ssh-copy-id esc
-    ...
-    [student@bastion ~]$ ssh esc
-	Last login: ...
-	[student@esc ~]$
+```shell
+student@bastion ~]$ ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/HPC/student/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+...
+student@bastion ~]$ ssh-copy-id esc
+...
+[student@bastion ~]$ ssh esc
+Last login: ...
+[student@esc ~]$
+```
 
 You don't need to generate different keys for the three servers because they
 share the home directories.
 
-Your shell is [`bash`](http://www.gnu.org/s/bash).
+See [below](#editing-remotely) for additional SSH configuration.
+
+Your shell is [`bash`](https://www.gnu.org/s/bash).
 
 Please note that:
 
@@ -106,7 +110,9 @@ Please note that:
 
 All the school hands-on material is included in a git repository. Get it using:
 
-    [student@esc ~]$ git clone https://github.com/infn-esc/esc21.git esc
+```shell
+[student@esc ~]$ git clone https://github.com/infn-esc/esc21.git esc
+```
 
 The repository contains also these pages.
 
@@ -116,48 +122,58 @@ The repository contains also these pages.
 
 1. Enable the right toolsets
 
-       [student@esc ~]$ scl enable devtoolset-8 llvm-toolset-7 bash
+```shell
+[student@esc ~]$ scl enable devtoolset-8 llvm-toolset-7 bash
+```
 
 1. Check the following commands and the respective outputs.
 
-       [student@esc ~]$ gcc --version
-       gcc (GCC) 8.3.1 20190311 (Red Hat 8.3.1-3)
-       ...
-       [student@esc ~]$ clang --version
-       clang version 5.0.1 (tags/RELEASE_501/final)
-       ...
-       [student@esc ~]$ valgrind --version
-       valgrind-3.14.0
-       [student@esc ~]$ perf --version
-       perf version 3.10.0-957.5.1.el7.x86_64.debug
+```shell
+[student@esc ~]$ gcc --version
+gcc (GCC) 8.3.1 20190311 (Red Hat 8.3.1-3)
+...
+[student@esc ~]$ clang --version
+clang version 5.0.1 (tags/RELEASE_501/final)
+...
+[student@esc ~]$ valgrind --version
+valgrind-3.14.0
+[student@esc ~]$ perf --version
+perf version 3.10.0-957.5.1.el7.x86_64.debug
+```
 
 1. Enable the use of gcc 9.2 and check that it's available
 
-       [student@esc ~]$ module load compilers/gcc-9.2.0_sl7
-       [student@esc ~]$ gcc --version
-       gcc (GCC) 9.2.0
-       ...
+```shell
+[student@esc ~]$ module load compilers/gcc-9.2.0_sl7
+[student@esc ~]$ gcc --version
+gcc (GCC) 9.2.0
+...
+```
 
 1. Enable the use of Threading Building Blocks (TBB)
 
-       [student@esc ~]$ source /storage/gpfs_maestro_home/hpc_software/tbb2019_20191006oss/bin/tbbvars.sh intel64 linux auto_tbbroot
-       [student@esc ~]$ echo $TBBROOT
-       /storage/gpfs_maestro_home/hpc_software/tbb2019_20191006oss/bin/..
+```shell
+[student@esc ~]$ source /storage/gpfs_maestro_home/hpc_software/tbb2019_20191006oss/bin/tbbvars.sh intel64 linux auto_tbbroot
+[student@esc ~]$ echo $TBBROOT
+/storage/gpfs_maestro_home/hpc_software/tbb2019_20191006oss/bin/..
+```
 
 ## Editing source code
 
 ### Editing locally
 
-On `esc` you can find several editors available, such as vim, emacs, nano. If
+On `esc` you can find several editors available, such as `vim`, `emacs`, `nano`. If
 the X display is available, graphical editors will open a window on your laptop;
 the network latency however may not be good enough to give you a fine
 experience. Just try.
 
 ### Editing remotely
 
-Alternatively you could edit the source code for the exercises on your laptop,
-synchronizing the files with the `esc` machine, for example using one of the
-following:
+Alternatively you could edit the source code for the exercises on your laptop.
+
+The best option is to use [Visual Studio Code](https://code.visualstudio.com/) with its [remote development
+extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack), but you
+can also simply synchronize the files with the `esc` machine, for example using one of the following:
 
 * `scp`: You can copy files remotely using `scp`, in both directions.
 
@@ -168,8 +184,8 @@ following:
   fully understand the meaning of the different options, so to avoid mistakes
   that could cause loss of data.
 
-For this to work seamlessly, however, you should first simplify your use of SSH
-to connect to `esc`, namely:
+For all these options to work seamlessly, however, you should first simplify your use of SSH to connect to `esc`,
+namely:
 
 * Enable the use of SSH keys in place of password authentication also from your
   laptop to `bastion`. You can reuse the keys you have already generate
@@ -177,5 +193,18 @@ to connect to `esc`, namely:
 * Enable an SSH tunnel on `bastion` in order to be able to connect directly from
   your laptop to `esc`
 
-The setup is not overly difficult, but it's not trivial either, so we suggest
-this approach only if you are familiar with the SSH mechanisms.
+In practice, adding something like the following to the `~/.ssh/config` file on your laptop should suffice:
+
+```shell
+Host bastion
+  HostName bastion.cnaf.infn.it
+
+Host esc
+  HostName hpc-201-11-40.cr.cnaf.infn.it
+  User student
+  ProxyJump bastion
+
+Host *
+  ForwardX11 yes
+  ForwardAgent yes
+```
