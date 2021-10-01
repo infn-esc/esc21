@@ -48,18 +48,20 @@ menu:
     name: floatingpoint
     label: FLOATING POINT
     items:
+    - name: fprep
+      label: Floating-Point Representation
+    - name: fpcommutative
+      label: Is FP sum commutative?
+    - name: fpsafemath
+      label: Floating-Point Optimizations
     - name: fpbasic
-      label: Basic
-    - name: quadsolver
-      label: Second Order Equation
+      label: Basic Exercise for you
   -
     name: vectorization
     label: VECTORIZATION
     items:
     - name: pi
       label: Vectorize computation of pi
-    - name: binning
-      label: Vectorize the filling of an histogram
   - name: parallelism
     label: PARALLELISM
     items:
