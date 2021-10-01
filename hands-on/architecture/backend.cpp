@@ -1,79 +1,93 @@
+#include <chrono>
 #include <cmath>
+#include <iostream>
+#include <random>
+#include <vector>
 
-struct Point {
+struct Point
+{
+  double norm() const
+  {
+    return std::sqrt(x * x + y * y + z * z);
+  }
 
-   double norm() const { return std::sqrt(x*x+y*y+z*z);}
-   
-   double x,y,z;
-   bool ok;
+  double x, y, z;
 };
 
-#include<random>
+std::default_random_engine reng;
+std::normal_distribution<double> gauss(10., 1.);
 
-std::mt19937 reng;
-std::normal_distribution<double> gauss(10.,1.);
-
-void fill(Point & p) {
+void fill(Point& p)
+{
   p.x = gauss(reng);
   p.y = gauss(reng);
   p.z = gauss(reng);
 }
 
-Point cross(Point const & a, Point const & b) {
-  Point c;
-  c.x = a.y*b.z+a.z*b.z;
-  c.y = a.x*b.z-a.z*b.x;  
-  c.z = a.y*b.x+a.x*b.y;
-  return c;
+Point cross(Point const& a, Point const& b)
+{
+  return {
+      a.y * b.z + a.z * b.z,
+      a.x * b.z - a.z * b.x,
+      a.y * b.x + a.x * b.y,
+  };
 }
 
-#include<vector>
-#include <chrono>
-#include<iostream>
+int main()
+{
+  auto start = std::chrono::steady_clock::now();
+  auto delta = start - start;
 
+  std::vector<Point> pointsI(1024 * 8);
+  std::vector<Point> pointsO(1024 * 8);
 
-
-int main() {
-
- auto start = std::chrono::high_resolution_clock::now();
- auto delta=start-start;
-
-  std::vector<Point> pointsI(1024*8);
-  std::vector<Point> pointsO(1024*8);
-  for (auto &p : pointsI) fill(p);
-  double sum=0;
-  for (int k=0; k<10000; ++k) {
-    if (k>0) delta -= (std::chrono::high_resolution_clock::now()-start);    
-    for (int i=0, n=pointsI.size(); i<n; ++i) {
-      pointsO[i].x = pointsI[i].x/pointsI[i].norm();
-      pointsO[i].y = pointsI[i].y/pointsI[i].norm();
-      pointsO[i].z = pointsI[i].z/pointsI[i].norm();
-    }
-    if (k>0) delta += (std::chrono::high_resolution_clock::now()-start);
-    for (auto &p : pointsO) sum+=p.x;
-
+  for (auto& p : pointsI) {
+    fill(p);
   }
 
-  auto deltaF = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
-  std::cout << "norm time " << deltaF << " " << sum << std::endl;
-
-
-  delta=start-start;
-
-  std::vector<Point> pointsI2(1024*8);
-  for (auto &p : pointsI2) fill(p);
-    for (int k=0; k<10000; ++k) {
-    if (k>0) delta -= (std::chrono::high_resolution_clock::now()-start);
-    for (int i=0, n=pointsI.size(); i<n; ++i) {
-      pointsO[i] = cross(pointsI[i],pointsI2[i]);
+  double sum = 0;
+  for (int k = 0; k < 10000; ++k) {
+    if (k > 0) {
+      delta -= (std::chrono::steady_clock::now() - start);
     }
-    if (k>0) delta += (std::chrono::high_resolution_clock::now()-start);
-    for (auto &p : pointsO) sum+=p.x;
-  } 
-  
- deltaF = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
- std::cout << "cross time " << deltaF << " " << sum << std::endl;
+    for (int i = 0, n = pointsI.size(); i < n; ++i) {
+      pointsO[i].x = pointsI[i].x / pointsI[i].norm();
+      pointsO[i].y = pointsI[i].y / pointsI[i].norm();
+      pointsO[i].z = pointsI[i].z / pointsI[i].norm();
+    }
+    if (k > 0) {
+      delta += (std::chrono::steady_clock::now() - start);
+    }
+    for (auto const& p : pointsO) {
+      sum += p.x;
+    }
+  }
 
+  auto deltaF =
+      std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
+  std::cout << "norm: " << sum << " in " << deltaF << " ms\n";
 
+  delta = start - start;
 
+  std::vector<Point> pointsI2(1024 * 8);
+  for (auto& p : pointsI2) {
+    fill(p);
+  }
+  for (int k = 0; k < 10000; ++k) {
+    if (k > 0) {
+      delta -= (std::chrono::steady_clock::now() - start);
+    }
+    for (int i = 0, n = pointsI.size(); i < n; ++i) {
+      pointsO[i] = cross(pointsI[i], pointsI2[i]);
+    }
+    if (k > 0) {
+      delta += (std::chrono::steady_clock::now() - start);
+    }
+    for (auto const& p : pointsO) {
+      sum += p.x;
+    }
+  }
+
+  deltaF = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
+  std::cout << "cross: " << sum << " in " << deltaF << " ms\n";
 }
