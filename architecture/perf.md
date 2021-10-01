@@ -4,33 +4,36 @@ layout: main
 category: Architecture
 ---
 
-PERF
-====
+# PERF
 
+`perf` is a tool to profile a process using *Hardware Performance Counters*. Each counter counts *events* in the CPU
+such as cycles, executed instructions, loads from a given level of the memory caches, branches...
 
-``perf`` is a tool to profile a process using ``Hardware Performance Counters``. Each counter counts
-Events in the CPU such as cycles, executed instructions, load from a given level of the memory caches,
-branches...
+`perf list` lists the event that are predefined inside the tool.
 
-{% highlight bash %}
-perf list
-{% endhighlight %}
-lists the event that are predefined inside the tool.
+The easiest way to use `perf` is to profile the whole application (say `./a.out`) using a default set of events
 
-
-the easiest way to use perf is to profile the whole application (say ./a.out) using a default set of events
-{% highlight bash %}
+```shell
 perf stat -d ./a.out
-{% endhighlight %}
+```
+
 or even
-{% highlight bash %}
+
+```shell
 perf stat -d -d -d ./a.out
-{% endhighlight %}
+```
 
+One can choose a set of events and list them on the command line, for example:
 
-One can choose a set of events and list them on the command line as in
+```shell
+perf stat -e task-clock -e cycles -e instructions \
+-e branch-instructions -e branch-misses \
+-e idle-cycles-frontend -e idle-cycles-backend \
+-e cache-references -e cache-misses -e L1-dcache-loads -e L1-dcache-load-misses ./a.out
+```
 
-[`doPerf`]({{site.exercises_repo}}/hands-on/architecture/doPerf)
+The [`doPerf`]({{site.exercises_repo}}/hands-on/architecture/doPerf) script is available, that runs `perf` on an
+executable, counting those events.
 
 For large applications more details can be obtained running ``perf record``  that will produce a file containing all sampled events and their location in the application.
 ``perf record  --call-graph=dwarf`` will produce a full call-graph. On more recent Intel hardware (since Haswell)
@@ -73,22 +76,18 @@ and in the excellent slides by A.Y. himself
 http://www.cs.technion.ac.il/~erangi/TMA_using_Linux_perf__Ahmad_Yasin.pdf
 
 
-Excercise 1
-===========
+## Excercise 1
 
-Architecture: Front-end
------------------------
+### Architecture: Front-end
 
-Use [branchPredictor.cpp]({{site.exercises_repo}}/hands-on/architecture/branchPredictor.cpp)
+Consider [branchPredictor.cpp]({{site.exercises_repo}}/hands-on/architecture/branchPredictor.cpp). Compile it and
+measure its performance with and without the sorting (enough to run with and without an argument). Explain the
+behaviour. Try the "original" version: possibly with a different compiler (gcc 4.7 for instance). Understand what it is
+happening (godbold can be of help). Modify the code to make it "branchless".
 
-compile, measure performance with and without the sorting (enough to run with and without an argument)
-explain behaviour. Try the "original" version: eventually with a different compiler (gcc 4.7 for instance).
-Undestand what it is happening (godbold can be of help). Modify the code to make it "branchless".
+### Architecture: back-end
 
-Architecture: back-end
------------------------
-
-Use [backend.cpp]({{site.exercises_repo}}/hands-on/architecture/bachend.cpp)
+Use [backend.cpp]({{site.exercises_repo}}/hands-on/architecture/backend.cpp)
 
 compile (c++ -Wall -g -march=native) with different compiler options (-O2,-O3, -Ofast, -funroll-loops) measure performance,
 indetify "hotspot", modify code to speed it up.
