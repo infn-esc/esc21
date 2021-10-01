@@ -153,10 +153,9 @@ gcc (GCC) 9.2.0
 1. Enable the use of Threading Building Blocks (TBB)
 
 ```shell
-[student@esc ~]$ source /storage/gpfs_maestro_home/hpc_software/tbb2019_20191006oss/bin/tbbvars.sh intel64 linux auto_tbbroot
+[student@esc ~]$ source /shared/software/tbb2019_20191006oss/bin/tbbvars.sh intel64 linux auto_tbbroot
 [student@esc ~]$ echo $TBBROOT
-/storage/gpfs_maestro_home/hpc_software/tbb2019_20191006oss/bin/..
-```
+/gpfs/gpfs/gpfs_maestro_software_new/tbb2019_20191006oss/bin/..```
 
 ## Editing source code
 
