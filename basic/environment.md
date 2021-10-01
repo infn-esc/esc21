@@ -114,6 +114,9 @@ All the school hands-on material is included in a git repository. Get it using:
 [student@esc ~]$ git clone https://github.com/infn-esc/esc21.git esc
 ```
 
+NOTE: to authenticate into Github you need to generate a personnal token as described here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+Then you can use the personal token as password during the https authentication.
+
 The repository contains also these pages.
 
 ## Testing the environment
