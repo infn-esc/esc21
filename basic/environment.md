@@ -45,10 +45,10 @@ The `-X` option forwards the X11 display. The `-A` option forwards the SSH agent
 
 From `bastion` you can then log onto the School computers. There are three
 servers available: `hpc-201-11-40.cr.cnaf.infn.it`,
-`hpc-200-06-05.cr.cnaf.infn.it` and `hpc-200-06-06.cr.cnaf.infn.it`. The first
+`hpc-200-06-06.cr.cnaf.infn.it`, `hpc-200-06-17.cr.cnaf.infn.it` and `hpc-200-06-18.cr.cnaf.infn.it`. The first
 one is the most powerful and should easily support all the students during their
-exercises, so prefer that one; the last two are meant mainly for the MPI
-exercises but are good enough also for all the rest. In fact when doing
+exercises, so prefer that one, in particular for the GPU exercises; the others are meant mainly for the MPI
+exercises but are good enough also for all the rest (except GPU hand-on). In fact when doing
 exercises that ask to measure performance, feel free to try all the machines and
 see if there are differences.
 
