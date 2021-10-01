@@ -35,6 +35,26 @@ perf stat -e task-clock -e cycles -e instructions \
 The [`doPerf`]({{site.exercises_repo}}/hands-on/architecture/doPerf) script is available, that runs `perf` on an
 executable, counting those events.
 
+
+## Exercise 
+
+### Architecture: Front-end
+
+Consider [branchPredictor.cpp]({{site.exercises_repo}}/hands-on/architecture/branchPredictor.cpp). Compile it and
+measure its performance with and without the sorting (enough to run with and without an argument). Explain the
+behaviour. Try the "original" version: possibly with a different compiler (gcc 4.7 for instance). Understand what it is
+happening (godbolt can be of help). Modify the code to make it "branchless".
+
+### Architecture: back-end
+
+Use [backend.cpp]({{site.exercises_repo}}/hands-on/architecture/backend.cpp)
+
+compile (c++ -Wall -g -march=native) with different compiler options (-O2,-O3, -Ofast, -funroll-loops) measure performance,
+indentify "hotspot", modify code to speed it up.
+
+
+## Further information
+
 For large applications more details can be obtained running ``perf record``  that will produce a file containing all sampled events and their location in the application.
 ``perf record  --call-graph=dwarf`` will produce a full call-graph. On more recent Intel hardware (since Haswell)
 one can use ``perf record  --call-graph=lbr`` which is faster and produces a more compact report.
@@ -74,127 +94,4 @@ The "TopDown" metodology and the use of toplel tool is documented in
 https://github.com/andikleen/pmu-tools/wiki/toplev-manual
 and in the excellent slides by A.Y. himself
 http://www.cs.technion.ac.il/~erangi/TMA_using_Linux_perf__Ahmad_Yasin.pdf
-
-
-## Excercise 1
-
-### Architecture: Front-end
-
-Consider [branchPredictor.cpp]({{site.exercises_repo}}/hands-on/architecture/branchPredictor.cpp). Compile it and
-measure its performance with and without the sorting (enough to run with and without an argument). Explain the
-behaviour. Try the "original" version: possibly with a different compiler (gcc 4.7 for instance). Understand what it is
-happening (godbold can be of help). Modify the code to make it "branchless".
-
-### Architecture: back-end
-
-Use [backend.cpp]({{site.exercises_repo}}/hands-on/architecture/backend.cpp)
-
-compile (c++ -Wall -g -march=native) with different compiler options (-O2,-O3, -Ofast, -funroll-loops) measure performance,
-indetify "hotspot", modify code to speed it up.
-
-
-Excercise 2
-===========
-
-
-Discover where and why time is wasted
--------------------------------------
-
-Use perf to discover why the performance of the four programs
-``randg.py``, ``randgNP.py``, ``randg.cpp`` and ``erfinv_t.cpp``
-(the last two to compile with ``c++ -Ofast -march=native``)
-are so vastly different even if there are supposed to perfom exaclty the same work:
-throw "N" random gaussian numbers and compute average and rms....
-
-Hints:
-try for instance
-``~/pmu-tools/toplev.py -l3  -v --single-thread taskset -c 10  --show-sample python randgNP.py``
-(instead of 10 use your "student number", this is to limit runinng on one cpu, one for each student)
-then run what suggested for sampling (but instead of -g use ``--call-graph=dwarf`` ``or --call-graph=lbr``
-display the results with either ``perf report -g graph,0.05,caller`` or ``perf report -g graph,0.05,callee`` or the simple
-``perf report -g none --no-children``
-You can add ``--stdio`` to have the graph printed on the screen on in a file
-
-
-Excercise 3
-===========
-
-Exchange the order of the loops in the matrix multiplication
-------------------------------------------------------------
-
-Use [matmul.cpp]({{site.exercises_repo}}/hands-on/architecture/matmul.cpp)
-
-Compile
-{% highlight bash %}
-c++ -O2 -fopt-info-vec -march=native
-{% endhighlight %}
-Measure. What's happening?
-{% highlight bash %}
-perf stat -d ./a.out
-{% endhighlight %}
-
-Recompile with<br>
--O3  (aggressive optimization and vectorization)<br>
--Ofast (allow reordering of math operation)<br>
-Add -funroll-loops (force loop unrolling)
-
-Change the product in a division
-(use `doOCPerfIB`)
-
-More tests
-==========
-
-
-Caveat: as in Exercise 2 compiler optimization choices may affect performances well bejond
-code changes and HW architecture.
-
-
-
-Compare Horner Method with Estrin
-----------------------------------
-
-
-Use [PolyTest.cpp]({{site.exercises_repo}}/hands-on/architecture/PolyTest.cpp)
-
-compile, measure performance and eventually change compiler options as in Exercise 2
-
-try also [pipeline.cpp]({{site.exercises_repo}}/hands-on/architecture/pipeline.cpp)
-
-
-Branch predictor in OO code
-----------------------------------
-
-Use [Virtual.cpp]({{site.exercises_repo}}/hands-on/architecture/Virtual.cpp)
-
-compile, measure performance and eventually change compiler options as in Exercise 2
-
-Measure in various conditions
-   * Remove “random_shuffle”
-   * Increase number of Derived Classes
-   * Try to change the order in the vector of pointers
-   * Try to see if using an _ad-hoc_ type identification makes a difference
-   * Compare with a SOA
-   * Try “AnyOf”
-
-
-
-
-
-Different form of “Branching” in conditional code
-----------------------------------
-
-Use [branchPredictor.cpp]({{site.exercises_repo}}/hands-on/architecture/branchPredictor.cpp)
-
-compile, measure performance with and without the sorting (enough to run with and without an argument)
-explain behaviour. Try the "original" version: eventually with a different compiler (gcc 4.7 for instance).
-Undestand what it is happening (godbold can be of help). Modify the code to make it "branchless".
-
-
-Use [Branch.cpp]({{site.exercises_repo}}/hands-on/architecture/Branch.cpp)
-
-compile, measure performance and eventually change compiler options as in Exercise 2
-
-Measure in various conditions
-   * Remove “random_shuffle”
-   * change the way the conditions are expressed
 
