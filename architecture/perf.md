@@ -51,7 +51,8 @@ Use [backend.cpp]({{site.exercises_repo}}/hands-on/architecture/backend.cpp)
 
 compile (`c++ -Wall -g -march=native`) with different compiler options (`-O2,-O3, -Ofast, -funroll-loops`) measure performance,
 indentify "hotspot", modify code to speed it up.
-Try toplev by: 
+
+You can also try the toplev analysis by: 
 ```
 git clone https://github.com/andikleen/pmu-tools.git
 cd pmu-tools/
