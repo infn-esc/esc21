@@ -5,17 +5,17 @@ section: parallelism
 ---
 ### Environment
 Make sure you are using the `gcc 9.2.0`:
-~~~
+```bash
 $ module load compilers/gcc-9.2.0_sl7
 $ gcc --version
 gcc (GCC) 9.2.0
 Copyright (C) 2019 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-~~~
+```
 
 ### Hello World
-~~~
+```C++
 #include <thread>
 #include <iostream>
 int main()
@@ -29,7 +29,7 @@ int main()
 //and then destroy it by joining it
   t0.join();
 }
-~~~
+```
 
 Compile with:
 ~~~
