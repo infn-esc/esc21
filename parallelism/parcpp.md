@@ -38,7 +38,7 @@ g++ std_threads.cpp -lpthread -o std_threads
 
 
 ### Measuring time intervals
-~~~
+```C++
 #include <chrono>
 ...
 auto start = std::chrono::system_clock::now();
@@ -46,10 +46,10 @@ auto start = std::chrono::system_clock::now();
 auto stop = std::chrono::system_clock::now();
 std::chrono::duration<double> dur= stop - start;
 std::cout << dur.count() << " seconds" << std::endl;
-~~~
+```
 ### Exercise 1. Reduction
 
-~~~
+```C++
 #include <iostream>
 #include <random>
 #include <utility>
@@ -82,10 +82,10 @@ int main(){
   std::cout << "Sum result: " << sum << std::endl;
   return 0;
 }
-~~~
+```
 
 ### Quickly create threads
-~~~
+```C++
 unsigned int n = std::thread::hardware_concurrency();
 std::vector<std::thread> v;
 for (int i = 0; i < n; ++i) {
@@ -94,10 +94,10 @@ for (int i = 0; i < n; ++i) {
 for (auto& t : v) {
     t.join();
 }
-~~~
+```
 
 ### Exercise 2. Numerical Integration
-~~~
+```C++
 #include <iostream>
 #include <iomanip>
 #include <chrono>
@@ -121,7 +121,7 @@ int main()
   std::cout << "result: " <<  std::setprecision (15) << pi << std::endl;
 }
 
-~~~
+```
 
 
 
@@ -141,7 +141,7 @@ If `r < 1`: the point is inside the circle and increase `Nin`.
 The ratio between `Nin` and `N` converges to the ratio between the areas.
 
 To generate random numbers have a look at the following example:
-```
+```C++
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -179,7 +179,7 @@ int main()
 ```
 #### Parallel Algos
 
-```
+```C++
 #include <vector>
 #include <algorithm>
 #include <execution>
@@ -206,17 +206,15 @@ int main() {
 ### Setting the environment for Intel TBB
 
 To enable the use of TBB:
-
-    [student@esc cpp]$ source \
-    /storage/gpfs_maestro_home/hpc_software/tbb2019_20191006oss/bin/tbbvars.sh \
-    intel64 linux auto_tbbroot
-
+```bash
+source /storage/gpfs_maestro_home/hpc_software/tbb2019_20191006oss/bin/tbbvars.sh intel64 linux auto_tbbroot
+```
 To compile and link:
-
-     [student@esc cpp]$ g++ -O3 algo_par.cpp -std=c++17 -I${TBBROOT}/include -L${TBBROOT}/lib/intel64/gcc4.8 -ltbb
-
+```bash
+g++ -O3 algo_par.cpp -std=c++17 -I${TBBROOT}/include -L${TBBROOT}/lib/intel64/gcc4.8 -ltbb
+```
 Let's check that you can compile a simple tbb program:
-~~~
+```C++
 #include <tbb/tbb.h>
 #include "tbb/task_scheduler_init.h"
 #include <iostream>
@@ -225,12 +223,12 @@ int main()
   tbb::task_scheduler_init init;
   std::cout << "Hello World!" << std::endl;
 }
-~~~
+```
 
 Compile with:
-~~~
+```bash
 g++ hello_world.cpp -ltbb -L tbb2019_20191006oss/lib/intel64/gcc4.8/
-~~~
+```
 
 
 ### Task parallelism
@@ -240,7 +238,7 @@ The `run` method is asynchronous. In order to be sure that the task has complete
 Alternatively, the `run_and_wait` method can be used.
 
 
-~~~
+```C++
 #include <tbb/tbb.h>
 #include "tbb/task_scheduler_init.h"
 #include "tbb/task_group.h"
@@ -267,17 +265,17 @@ int main()
   std::cout << Fib(40) << std::endl;
   return 0;
 }
-~~~
+```
 
 ### Bonus: Graph Traversal
 
 Generate a direct acyclic graph represented as a `std::vector<Vertex> graph` of 20 vertices:
-~~~
+```
 struct Vertex {
   unsigned int N;
   std::vector<int> Neighbors;
 }
-~~~
+```
 
 If there is a connection from `A` to `B`, the index of the element `B` in `graph` needs to be pushed into `A.Neighbors`.
 Make sure that from the first element of `graph` you can visit the entire graph.
