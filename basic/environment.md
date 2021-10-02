@@ -118,15 +118,15 @@ The repository contains also these pages.
 
 ## Testing the environment
 
-1. Log into `esc`.
+* Log into `esc`.
 
-1. Enable the right toolsets
+* Enable the right toolsets
 
 ```shell
 [student@esc ~]$ scl enable devtoolset-8 llvm-toolset-7 bash
 ```
 
-1. Check the following commands and the respective outputs.
+* Check the following commands and the respective outputs.
 
 ```shell
 [student@esc ~]$ gcc --version
@@ -141,7 +141,7 @@ valgrind-3.14.0
 perf version 3.10.0-957.5.1.el7.x86_64.debug
 ```
 
-1. Enable the use of gcc 9.2 and check that it's available
+* Enable the use of gcc 9.2 and check that it's available
 
 ```shell
 [student@esc ~]$ module load compilers/gcc-9.2.0_sl7
@@ -150,12 +150,13 @@ gcc (GCC) 9.2.0
 ...
 ```
 
-1. Enable the use of Threading Building Blocks (TBB)
+* Enable the use of Threading Building Blocks (TBB)
 
 ```shell
 [student@esc ~]$ source /shared/software/tbb2019_20191006oss/bin/tbbvars.sh intel64 linux auto_tbbroot
 [student@esc ~]$ echo $TBBROOT
-/gpfs/gpfs/gpfs_maestro_software_new/tbb2019_20191006oss/bin/..```
+/gpfs/gpfs/gpfs_maestro_software_new/tbb2019_20191006oss/bin/..
+```
 
 ## Editing source code
 
@@ -168,11 +169,11 @@ experience. Just try.
 
 ### Editing remotely
 
-Alternatively you could edit the source code for the exercises on your laptop.
+The best option to edit files remotely is to use [Visual Studio Code](https://code.visualstudio.com/) with its [remote
+development extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack).
 
-The best option is to use [Visual Studio Code](https://code.visualstudio.com/) with its [remote development
-extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack), but you
-can also simply synchronize the files with the `esc` machine, for example using one of the following:
+Alternatively you could edit the source code for the exercises on your laptop, synchronizing them with the `esc`
+machine, for example using one of the following:
 
 * `scp`: You can copy files remotely using `scp`, in both directions.
 
@@ -187,10 +188,10 @@ For all these options to work seamlessly, however, you should first simplify you
 namely:
 
 * Enable the use of SSH keys in place of password authentication also from your
-  laptop to `bastion`. You can reuse the keys you have already generate
+  laptop to `bastion`. You can reuse the keys you have already generate.
 
 * Enable an SSH tunnel on `bastion` in order to be able to connect directly from
-  your laptop to `esc`
+  your laptop to `esc`.
 
 In practice, adding something like the following to the `~/.ssh/config` file on your laptop should suffice:
 
