@@ -24,8 +24,7 @@ Duration fill(Container& cont, int N)
     // generate a number between 0 and the current size of the container
     auto n = dist(eng, Distribution::param_type{0, static_cast<int>(cont.size())});
     // advance n positions in the container
-    auto it = cont.begin();
-    std::advance(it, n);
+    auto it = std::next(cont.begin(), n);
     // insert the number itself in that position
     cont.insert(it, n);
   }
