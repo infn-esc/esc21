@@ -203,31 +203,64 @@ int main() {
 }
 ```
 
-### Setting the environment for Intel TBB
+### Setting the environment for Intel oneTBB
 
-To enable the use of TBB:
+Download and extract the latest release for tbb:
 ```bash
-source /storage/gpfs_maestro_home/hpc_software/tbb2019_20191006oss/bin/tbbvars.sh intel64 linux auto_tbbroot
+wget https://github.com/oneapi-src/oneTBB/releases/download/v2021.3.0/oneapi-tbb-2021.3.0-lin.tgz
+tar -xzf oneapi-tbb-2021.3.0-lin.tgz 
 ```
+Let's now set the environment to use this version of oneTBB.
+```bash
+module load compilers/gcc-9.2.0_sl7
+source oneapi-tbb-2021.3.0/env/vars.sh intel64 linux auto_tbbroot
+echo $TBBROOT
+```
+
 To compile and link:
 ```bash
-g++ -O3 algo_par.cpp -std=c++17 -I${TBBROOT}/include -L${TBBROOT}/lib/intel64/gcc4.8 -ltbb
+g++ -O2 algo_par.cpp  -ltbb
 ```
 Let's check that you can compile a simple tbb program:
 ```C++
-#include <tbb/tbb.h>
-#include "tbb/task_scheduler_init.h"
-#include <iostream>
-int main()
-{
-  tbb::task_scheduler_init init;
-  std::cout << "Hello World!" << std::endl;
+#include <cstdint>
+#include <oneapi/tbb.h>
+#include <oneapi/tbb/info.h>
+#include <oneapi/tbb/parallel_for.h>
+#include <oneapi/tbb/task_arena.h>
+#include <cassert>
+
+int main() {
+  // Get the default number of threads
+  int num_threads = oneapi::tbb::info::default_concurrency();
+
+  // Run the default parallelism
+  oneapi::tbb::parallel_for(
+      oneapi::tbb::blocked_range<size_t>(0, 20),
+      [=](const oneapi::tbb::blocked_range<size_t> &r) {
+        // Assert the maximum number of threads
+        assert(num_threads == oneapi::tbb::this_task_arena::max_concurrency());
+      });
+
+  // Create the default task_arena
+  oneapi::tbb::task_arena arena;
+  arena.execute([=] {
+    oneapi::tbb::parallel_for(
+        oneapi::tbb::blocked_range<size_t>(0, 20),
+        [=](const oneapi::tbb::blocked_range<size_t> &r) {
+          // Assert the maximum number of threads
+          assert(num_threads ==
+                 oneapi::tbb::this_task_arena::max_concurrency());
+        });
+  });
+
+  return 0;
 }
 ```
 
 Compile with:
 ```bash
-g++ hello_world.cpp -ltbb -L tbb2019_20191006oss/lib/intel64/gcc4.8/
+g++ your_first_tbb_program.cpp -ltbb 
 ```
 
 
