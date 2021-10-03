@@ -45,13 +45,47 @@ measure its performance with and without the sorting (enough to run with and wit
 behaviour. Try the "original" version: possibly with a different compiler (gcc 4.7 for instance). Understand what it is
 happening (godbolt can be of help). Modify the code to make it "branchless".
 
-### Architecture: back-end
+### toplev
 
 Use [backend.cpp]({{site.exercises_repo}}/hands-on/architecture/backend.cpp)
 
-compile (c++ -Wall -g -march=native) with different compiler options (-O2,-O3, -Ofast, -funroll-loops) measure performance,
+compile (`c++ -Wall -g -march=native`) with different compiler options (`-O2,-O3, -Ofast, -funroll-loops`) measure performance,
 indentify "hotspot", modify code to speed it up.
 
+You can also try the toplev analysis by: 
+```
+git clone https://github.com/andikleen/pmu-tools.git
+cd pmu-tools/
+export PATH=$PATH:$(pwd)
+```
+
+Then run your program with `toplev.py`.
+You can set the affinity of a program by using `taskset`. For example, `taskset -c 0 ./out` will force the program to run on core 0.
+```
+toplev.py --single-thread ./out
+```
+or 
+```
+toplev.py --all --core C0 taskset -c 0,1 program
+```
+
+A wrapper defining more user-friedly name for INTEL counters can be downloaded as part of `pmu-tools`
+
+Try:
+```
+ocperf.py list
+```
+
+to have a list of ALL available counters (and their meaning)
+The actual name of the counters keep changing, so for a detail analysis one has to tailor the events to the actual hardware...
+
+An example (tailored to the Skylake-avx512 machine also available used for the exercise) see
+[`doOCPerfSX`]({{site.exercises_repo}}/hands-on/architecture/doOCPerfSX)
+
+The "TopDown" metodology and the use of toplel tool is documented in
+https://github.com/andikleen/pmu-tools/wiki/toplev-manual
+and in the excellent slides by A.Y. himself
+http://www.cs.technion.ac.il/~erangi/TMA_using_Linux_perf__Ahmad_Yasin.pdf
 
 ## Further information
 
@@ -68,30 +102,4 @@ an interesting reading is also
 https://stackoverflow.com/questions/27742462/understanding-linux-perf-report-output
 
 
-a wrapper defining more user-friedly name for INTEL counters can be downloaded
-{% highlight bash %}
-cd;git clone https://github.com/andikleen/pmu-tools.git
-{% endhighlight %}
-in your home directory
-and executed in place of `perf` as
- {% highlight bash %}
-~/pmu-tools/ocperf.py
-{% endhighlight %}
-try
-{% highlight bash %}
-~/pmu-tools/ocperf.py list
-{% endhighlight %}
-to have a list of ALL available counters (and their meaning)
-The actual name of the counters keep changing, so for a detail analysis one has to tailor the events to the actual hardware...
-
-for an example (tailored to the Ivy-Bridge machines used for the exercise) see
-[`doOCPerfIB`]({{site.exercises_repo}}/hands-on/architecture/doOCPerfIB)
-
-or an example (tailored to the Skylake-avx512 machine also available used for the exercise) see
-[`doOCPerfSX`]({{site.exercises_repo}}/hands-on/architecture/doOCPerfSX)
-
-The "TopDown" metodology and the use of toplel tool is documented in
-https://github.com/andikleen/pmu-tools/wiki/toplev-manual
-and in the excellent slides by A.Y. himself
-http://www.cs.technion.ac.il/~erangi/TMA_using_Linux_perf__Ahmad_Yasin.pdf
 

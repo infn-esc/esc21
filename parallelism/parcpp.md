@@ -5,17 +5,17 @@ section: parallelism
 ---
 ### Environment
 Make sure you are using the `gcc 9.2.0`:
-~~~
+```bash
 $ module load compilers/gcc-9.2.0_sl7
 $ gcc --version
 gcc (GCC) 9.2.0
 Copyright (C) 2019 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-~~~
+```
 
 ### Hello World
-~~~
+```C++
 #include <thread>
 #include <iostream>
 int main()
@@ -29,7 +29,7 @@ int main()
 //and then destroy it by joining it
   t0.join();
 }
-~~~
+```
 
 Compile with:
 ~~~
@@ -38,7 +38,7 @@ g++ std_threads.cpp -lpthread -o std_threads
 
 
 ### Measuring time intervals
-~~~
+```C++
 #include <chrono>
 ...
 auto start = std::chrono::system_clock::now();
@@ -46,10 +46,10 @@ auto start = std::chrono::system_clock::now();
 auto stop = std::chrono::system_clock::now();
 std::chrono::duration<double> dur= stop - start;
 std::cout << dur.count() << " seconds" << std::endl;
-~~~
+```
 ### Exercise 1. Reduction
 
-~~~
+```C++
 #include <iostream>
 #include <random>
 #include <utility>
@@ -82,10 +82,10 @@ int main(){
   std::cout << "Sum result: " << sum << std::endl;
   return 0;
 }
-~~~
+```
 
 ### Quickly create threads
-~~~
+```C++
 unsigned int n = std::thread::hardware_concurrency();
 std::vector<std::thread> v;
 for (int i = 0; i < n; ++i) {
@@ -94,10 +94,10 @@ for (int i = 0; i < n; ++i) {
 for (auto& t : v) {
     t.join();
 }
-~~~
+```
 
 ### Exercise 2. Numerical Integration
-~~~
+```C++
 #include <iostream>
 #include <iomanip>
 #include <chrono>
@@ -121,7 +121,7 @@ int main()
   std::cout << "result: " <<  std::setprecision (15) << pi << std::endl;
 }
 
-~~~
+```
 
 
 
@@ -141,7 +141,7 @@ If `r < 1`: the point is inside the circle and increase `Nin`.
 The ratio between `Nin` and `N` converges to the ratio between the areas.
 
 To generate random numbers have a look at the following example:
-```
+```C++
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -179,7 +179,7 @@ int main()
 ```
 #### Parallel Algos
 
-```
+```C++
 #include <vector>
 #include <algorithm>
 #include <execution>
@@ -203,34 +203,65 @@ int main() {
 }
 ```
 
-### Setting the environment for Intel TBB
+### Setting the environment for Intel oneTBB
 
-To enable the use of TBB:
-
-    [student@esc cpp]$ source \
-    /storage/gpfs_maestro_home/hpc_software/tbb2019_20191006oss/bin/tbbvars.sh \
-    intel64 linux auto_tbbroot
+Download and extract the latest release for tbb:
+```bash
+wget https://github.com/oneapi-src/oneTBB/releases/download/v2021.3.0/oneapi-tbb-2021.3.0-lin.tgz
+tar -xzf oneapi-tbb-2021.3.0-lin.tgz 
+```
+Let's now set the environment to use this version of oneTBB.
+```bash
+module load compilers/gcc-9.2.0_sl7
+source oneapi-tbb-2021.3.0/env/vars.sh intel64 linux auto_tbbroot
+echo $TBBROOT
+```
 
 To compile and link:
-
-     [student@esc cpp]$ g++ -O3 algo_par.cpp -std=c++17 -I${TBBROOT}/include -L${TBBROOT}/lib/intel64/gcc4.8 -ltbb
-
+```bash
+g++ -O2 algo_par.cpp  -ltbb
+```
 Let's check that you can compile a simple tbb program:
-~~~
-#include <tbb/tbb.h>
-#include "tbb/task_scheduler_init.h"
-#include <iostream>
-int main()
-{
-  tbb::task_scheduler_init init;
-  std::cout << "Hello World!" << std::endl;
+```C++
+#include <cstdint>
+#include <oneapi/tbb.h>
+#include <oneapi/tbb/info.h>
+#include <oneapi/tbb/parallel_for.h>
+#include <oneapi/tbb/task_arena.h>
+#include <cassert>
+
+int main() {
+  // Get the default number of threads
+  int num_threads = oneapi::tbb::info::default_concurrency();
+
+  // Run the default parallelism
+  oneapi::tbb::parallel_for(
+      oneapi::tbb::blocked_range<size_t>(0, 20),
+      [=](const oneapi::tbb::blocked_range<size_t> &r) {
+        // Assert the maximum number of threads
+        assert(num_threads == oneapi::tbb::this_task_arena::max_concurrency());
+      });
+
+  // Create the default task_arena
+  oneapi::tbb::task_arena arena;
+  arena.execute([=] {
+    oneapi::tbb::parallel_for(
+        oneapi::tbb::blocked_range<size_t>(0, 20),
+        [=](const oneapi::tbb::blocked_range<size_t> &r) {
+          // Assert the maximum number of threads
+          assert(num_threads ==
+                 oneapi::tbb::this_task_arena::max_concurrency());
+        });
+  });
+
+  return 0;
 }
-~~~
+```
 
 Compile with:
-~~~
-g++ hello_world.cpp -ltbb -L tbb2019_20191006oss/lib/intel64/gcc4.8/
-~~~
+```bash
+g++ your_first_tbb_program.cpp -ltbb 
+```
 
 
 ### Task parallelism
@@ -240,44 +271,41 @@ The `run` method is asynchronous. In order to be sure that the task has complete
 Alternatively, the `run_and_wait` method can be used.
 
 
-~~~
-#include <tbb/tbb.h>
-#include "tbb/task_scheduler_init.h"
-#include "tbb/task_group.h"
+```C++
 #include <iostream>
+#include <oneapi/tbb.h>
+#include <oneapi/tbb/task_group.h>
 
-using namespace tbb;
+using namespace oneapi::tbb;
 
 int Fib(int n) {
-    if( n<2 ) {
-        return n;
-    } else {
-        int x, y;
-        task_group g;
-        g.run([&]{x=Fib(n-1);}); // spawn a task
-        g.run([&]{y=Fib(n-2);}); // spawn another task
-        g.wait();                // wait for both tasks to complete
-        return x+y;
-    }
+  if (n < 2) {
+    return n;
+  } else {
+    int x, y;
+    task_group g;
+    g.run([&] { x = Fib(n - 1); }); // spawn a task
+    g.run([&] { y = Fib(n - 2); }); // spawn another task
+    g.wait();                       // wait for both tasks to complete
+    return x + y;
+  }
 }
 
-int main()
-{
-  int n = tbb::task_scheduler_init::default_num_threads();
+int main() {
   std::cout << Fib(40) << std::endl;
   return 0;
 }
-~~~
+```
 
 ### Bonus: Graph Traversal
 
 Generate a direct acyclic graph represented as a `std::vector<Vertex> graph` of 20 vertices:
-~~~
+```C++
 struct Vertex {
   unsigned int N;
   std::vector<int> Neighbors;
 }
-~~~
+```
 
 If there is a connection from `A` to `B`, the index of the element `B` in `graph` needs to be pushed into `A.Neighbors`.
 Make sure that from the first element of `graph` you can visit the entire graph.
