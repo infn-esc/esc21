@@ -41,9 +41,9 @@ g++ std_threads.cpp -lpthread -o std_threads
 ```C++
 #include <chrono>
 ...
-auto start = std::chrono::system_clock::now();
+auto start = std::chrono::steady_clock::now();
   foo();
-auto stop = std::chrono::system_clock::now();
+auto stop = std::chrono::steady_clock::now();
 std::chrono::duration<double> dur= stop - start;
 std::cout << dur.count() << " seconds" << std::endl;
 ```
