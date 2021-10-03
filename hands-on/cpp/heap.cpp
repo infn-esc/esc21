@@ -3,13 +3,13 @@
 
 void heap()
 {
-  int* volatile m = new int;
+  int* m = new int;
   delete m;
 }
 
 int main()
 {
-  int const N = 1000000;
+  int const N = 100000000;
 
   auto start = std::chrono::high_resolution_clock::now();
 
@@ -20,6 +20,7 @@ int main()
   auto stop = std::chrono::high_resolution_clock::now();
 
   std::cout << N << " iterations: "
-            << std::chrono::duration<double>(stop - start).count()
-            << " s\n";
+            << std::chrono::duration_cast<std::chrono::nanoseconds>(stop -
+                start).count()/N
+            << " ns\n";
 }
