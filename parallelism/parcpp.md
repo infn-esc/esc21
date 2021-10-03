@@ -272,29 +272,26 @@ Alternatively, the `run_and_wait` method can be used.
 
 
 ```C++
-#include <tbb/tbb.h>
-#include "tbb/task_scheduler_init.h"
-#include "tbb/task_group.h"
 #include <iostream>
+#include <oneapi/tbb.h>
+#include <oneapi/tbb/task_group.h>
 
-using namespace tbb;
+using namespace oneapi::tbb;
 
 int Fib(int n) {
-    if( n<2 ) {
-        return n;
-    } else {
-        int x, y;
-        task_group g;
-        g.run([&]{x=Fib(n-1);}); // spawn a task
-        g.run([&]{y=Fib(n-2);}); // spawn another task
-        g.wait();                // wait for both tasks to complete
-        return x+y;
-    }
+  if (n < 2) {
+    return n;
+  } else {
+    int x, y;
+    task_group g;
+    g.run([&] { x = Fib(n - 1); }); // spawn a task
+    g.run([&] { y = Fib(n - 2); }); // spawn another task
+    g.wait();                       // wait for both tasks to complete
+    return x + y;
+  }
 }
 
-int main()
-{
-  int n = tbb::task_scheduler_init::default_num_threads();
+int main() {
   std::cout << Fib(40) << std::endl;
   return 0;
 }
@@ -303,7 +300,7 @@ int main()
 ### Bonus: Graph Traversal
 
 Generate a direct acyclic graph represented as a `std::vector<Vertex> graph` of 20 vertices:
-```
+```C++
 struct Vertex {
   unsigned int N;
   std::vector<int> Neighbors;
