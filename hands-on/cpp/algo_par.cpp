@@ -12,7 +12,7 @@ int main()
   // define a pseudo-random number generator engine and seed it using an actual
   // random device
   std::random_device rd;
-  std::mt19937 eng{rd()};
+  std::default_random_engine eng{rd()};
 
   int const MAX_N = 100;
   std::uniform_int_distribution<int> uniform_dist{1, MAX_N};
@@ -21,7 +21,7 @@ int main()
   int const SIZE = 10000000;
   std::vector<int> v;
   v.reserve(SIZE);
-  std::generate_n(std::back_inserter(v), SIZE, [&]() { return uniform_dist(eng); });
+  std::generate_n(std::back_inserter(v), SIZE, [&] { return uniform_dist(eng); });
 
   {
     auto t0 = std::chrono::high_resolution_clock::now();
@@ -65,4 +65,3 @@ int main()
     std::cout << " in " << d.count() << " s\n";
   }
 }
-

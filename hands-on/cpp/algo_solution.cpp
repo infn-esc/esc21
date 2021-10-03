@@ -45,7 +45,7 @@ int main()
   std::vector<int> unique_v;
   std::unique_copy(std::begin(v), std::end(v), std::back_inserter(unique_v));
   std::cout << "unique: " << unique_v << '\n';
-};
+}
 
 std::ostream& operator<<(std::ostream& os, std::vector<int> const& c)
 {
@@ -65,14 +65,14 @@ std::vector<int> make_vector(int N)
   // define a pseudo-random number generator engine and seed it using an actual
   // random device
   std::random_device rd;
-  std::mt19937 eng{rd()};
+  std::default_random_engine eng{rd()};
 
   int const MAX_N = 100;
   std::uniform_int_distribution<int> dist{1, MAX_N};
 
   std::vector<int> result;
   result.reserve(N);
-  std::generate_n(std::back_inserter(result), N, [&]() { return dist(eng); });
+  std::generate_n(std::back_inserter(result), N, [&] { return dist(eng); });
 
   return result;
 }

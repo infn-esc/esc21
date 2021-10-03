@@ -25,7 +25,7 @@ int main()
 
   // remove duplicate elements
   // use std::sort followed by std::unique/unique_copy
-};
+}
 
 std::ostream& operator<<(std::ostream& os, std::vector<int> const& c)
 {
@@ -43,14 +43,14 @@ std::ostream& operator<<(std::ostream& os, std::vector<int> const& c)
 std::vector<int> make_vector(int N)
 {
   std::random_device rd;
-  std::mt19937 eng{rd()};
+  std::default_random_engine eng{rd()};
 
   int const MAX_N = 100;
   std::uniform_int_distribution<int> dist{1, MAX_N};
 
   std::vector<int> result;
   result.reserve(N);
-  std::generate_n(std::back_inserter(result), N, [&]() { return dist(eng); });
+  std::generate_n(std::back_inserter(result), N, [&] { return dist(eng); });
 
   return result;
 }
