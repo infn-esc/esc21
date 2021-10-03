@@ -15,63 +15,72 @@ $ cd esc21/hands-on/cuda_exercises
 
 
 Check that your environment is correctly configured to compile CUDA code by running:
-```
-$ module load compilers/gcc-7.3.0_sl7
-$ module load compilers/cuda-10.1
+```bash
+module load compilers/gcc-9.2.0_sl7
+export PATH=/usr/local/cuda-11.2/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda-11.2/lib64:$LD_LIBRARY_PATH
 $ nvcc --version
-nvcc: NVIDIA (R) Cuda compiler driver
-Copyright (c) 2005-2019 NVIDIA Corporation
-Built on Sun_Jul_28_19:07:16_PDT_2019
-Cuda compilation tools, release 10.1, V10.1.243
+ nvcc: NVIDIA (R) Cuda compiler driver
+ Copyright (c) 2005-2020 NVIDIA Corporation
+ Built on Mon_Nov_30_19:08:53_PST_2020
+ Cuda compilation tools, release 11.2, V11.2.67
+ Build cuda_11.2.r11.2/compiler.29373293_0
 ```
 
 Compile and run the `deviceQuery` application:
-~~~
-$ cd esc21/hands-on/cuda_exercises/utils/deviceQuery
-$ make
-~~~
+```
+cd esc21/hands-on/cuda_exercises/utils/deviceQuery
+make
+```
 
 You can get some useful information about the features and the limits that you will find on the device you will be running your code on. For example:
-~~~
+```
 ./deviceQuery Starting...
 
  CUDA Device Query (Runtime API) version (CUDART static linking)
 
-Detected 2 CUDA Capable device(s)
+Detected 4 CUDA Capable device(s)
 
-Device 0: "Tesla K40m"
-  CUDA Driver Version / Runtime Version          10.1 / 10.0
-  CUDA Capability Major/Minor version number:    3.5
-  Total amount of global memory:                 11441 MBytes (11996954624 bytes)
-  (15) Multiprocessors x (192) CUDA Cores/MP:    2880 CUDA Cores
-  GPU Clock rate:                                745 MHz (0.75 GHz)
-  Memory Clock rate:                             3004 Mhz
-  Memory Bus Width:                              384-bit
-  L2 Cache Size:                                 1572864 bytes
-  Max Texture Dimension Size (x,y,z)             1D=(65536), 2D=(65536,65536), 3D=(4096,4096,4096)
-  Max Layered Texture Size (dim) x layers        1D=(16384) x 2048, 2D=(16384,16384) x 2048
+Device 0: "Tesla V100-SXM2-32GB"
+  CUDA Driver Version / Runtime Version          11.2 / 11.2
+  CUDA Capability Major/Minor version number:    7.0
+  Total amount of global memory:                 32510 MBytes (34089730048 bytes)
+  (80) Multiprocessors, ( 64) CUDA Cores/MP:     5120 CUDA Cores
+  GPU Max Clock rate:                            1530 MHz (1.53 GHz)
+  Memory Clock rate:                             877 Mhz
+  Memory Bus Width:                              4096-bit
+  L2 Cache Size:                                 6291456 bytes
+  Maximum Texture Dimension Size (x,y,z)         1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
+  Maximum Layered 1D Texture Size, (num) layers  1D=(32768), 2048 layers
+  Maximum Layered 2D Texture Size, (num) layers  2D=(32768, 32768), 2048 layers
   Total amount of constant memory:               65536 bytes
   Total amount of shared memory per block:       49152 bytes
+  Total shared memory per multiprocessor:        98304 bytes
   Total number of registers available per block: 65536
   Warp size:                                     32
   Maximum number of threads per multiprocessor:  2048
   Maximum number of threads per block:           1024
-  Maximum sizes of each dimension of a block:    1024 x 1024 x 64
-  Maximum sizes of each dimension of a grid:     2147483647 x 65535 x 65535
+  Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
+  Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)
   Maximum memory pitch:                          2147483647 bytes
   Texture alignment:                             512 bytes
-  Concurrent copy and kernel execution:          Yes with 2 copy engine(s)
+  Concurrent copy and kernel execution:          Yes with 5 copy engine(s)
   Run time limit on kernels:                     No
   Integrated GPU sharing Host Memory:            No
   Support host page-locked memory mapping:       Yes
   Alignment requirement for Surfaces:            Yes
   Device has ECC support:                        Enabled
   Device supports Unified Addressing (UVA):      Yes
-  Device PCI Bus ID / PCI location ID:           2 / 0
+  Device supports Managed Memory:                Yes
+  Device supports Compute Preemption:            Yes
+  Supports Cooperative Kernel Launch:            Yes
+  Supports MultiDevice Co-op Kernel Launch:      Yes
+  Device PCI Domain ID / Bus ID / location ID:   0 / 97 / 0
   Compute Mode:
-     < Default (multiple host threads can use ::cudaSetDevice() with device simultaneously) >
+     < Exclusive Process (many threads in one process is able to use ::cudaSetDevice() with this device) >
+```
 
-~~~
+
 Some of you are sharing the same machine and some time measurements can be influenced by other users running at the very same moment. It can be necessary to run time measurements multiple times.
 
 
@@ -84,10 +93,10 @@ In this exercise you will learn what heterogeneous memory model means, by demons
 5. Free the memory allocated for d_a and d_b.
 6. Compile and run the program by running:
 
-~~~
+```bash
 $ nvcc cuda_mem_model.cu -o ex01
 $ ./ex01
-~~~
+```bash
 
 * Bonus: Measure the PCI Express bandwidth.
 
@@ -98,7 +107,7 @@ By completing this exercise you will learn how to configure and launch a simple 
 2. Configure the kernel to run using a one-dimensional grid of one-dimensional blocks;
 3. Each GPU thread should set one element of the array to:
 
-   `d_a[i] = blockIdx.x + threadIdx.x;`
+   `d_a[i] = blockIdx.x + threadIdx.x + 42;`
 4. Copy the results to the host memory;
 5. Check the correctness of the results
 
@@ -127,9 +136,10 @@ Throughput (GB/s)= Memory_rate(Hz) * memory_interface_width(byte) * 2 /10<sup>9<
 4. What did you find out? Can you give an explanation?
 5. NVIDIA Visual Profiler can deliver vital feedback for optimizing your CUDA applications.
 Run it and analyze ex04.
-~~~
-$ nvvp &
-~~~
+
+```bash
+nvvp &
+```
 
 ### Exercise 5. Parallel Reduction
 Given an array `a[N]`, the reduction sum `Sum` of a is the sum of all its elements: `Sum=a[0]+a[1]+...a[N-1]`.
@@ -174,7 +184,7 @@ An atomic function performs a read-modify-write atomic operation on one 32-bit o
 The operation is atomic in the sense that it is guaranteed to be performed without interference from other threads.
 
 
-```
+```C++
 int atomicAdd(int* address, int val);
 unsigned int atomicAdd(unsigned int* address,
                        unsigned int val);
