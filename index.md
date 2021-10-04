@@ -17,3 +17,8 @@ The presentations used for the lectures are attached to the
 [agenda](https://agenda.infn.it/event/28243/) and can be downloaded as
 a [single archive file](https://agenda.infn.it/event/28243/attachments/package),
 but wait until the end of the week.
+
+An [online document](https://docs.google.com/document/d/1qrhT3JoDezhlZNYrwClh_3k-yB-q_Hfo0quaKPBTZkU/edit?usp=sharing)
+is available to collect questions and comments that you want
+to share during the lectures or typos and mistakes that you notice.
+
