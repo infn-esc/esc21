@@ -95,7 +95,7 @@ In this exercise you will learn what heterogeneous memory model means, by demons
 ```bash
 $ nvcc cuda_mem_model.cu -o ex01
 $ ./ex01
-```bash
+```
 
 * Bonus: Measure the PCI Express bandwidth.
 
@@ -164,7 +164,7 @@ The input length can be assumed to be less than 2ˆ32. `NUM_BINS` is fixed at 40
 This can be split into two kernels: one that does a histogram without saturation, and a final kernel that cleans up the bins if they are too large. These two stages can also be combined into a single kernel.
 
 ### Utility. Measuring time using CUDA Events
-~~~
+```C++
 cudaEvent_t start, stop; float time;
 cudaEventCreate(&start);  cudaEventCreate(&stop);
 cudaEventRecord(start, 0);
@@ -173,7 +173,7 @@ cudaEventRecord(stop, 0);
 cudaEventSynchronize(stop);
 cudaEventElapsedTime(&time, start, stop);
 std::cout << "Time for the kernel: " << time << " ms" << std::endl;
-~~~
+```
 
 
 
