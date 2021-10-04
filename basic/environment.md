@@ -43,7 +43,7 @@ Last login: ...
 
 The `-X` option forwards the X11 display. The `-A` option forwards the SSH agent.
 
-From `bastion` you can then log onto the School computers. There are three
+From `bastion` you can then log onto the School computers. There are four
 servers available: `hpc-201-11-40.cr.cnaf.infn.it`,
 `hpc-200-06-06.cr.cnaf.infn.it`, `hpc-200-06-17.cr.cnaf.infn.it` and `hpc-200-06-18.cr.cnaf.infn.it`. The first
 one is the most powerful and should easily support all the students during their
