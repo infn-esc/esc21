@@ -198,6 +198,7 @@ In practice, adding something like the following to the `~/.ssh/config` file on 
 ```shell
 Host bastion
   HostName bastion.cnaf.infn.it
+  User student
 
 Host esc
   HostName hpc-201-11-40.cr.cnaf.infn.it
