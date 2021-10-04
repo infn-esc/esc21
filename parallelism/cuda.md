@@ -27,7 +27,7 @@ $ nvcc --version
 ```
 
 Compile and run the `deviceQuery` application:
-```
+```bash
 cd esc21/hands-on/cuda_exercises/utils/deviceQuery
 make
 ```
