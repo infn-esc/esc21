@@ -1,4 +1,5 @@
-#include <stdio.h>
+#include <vector>
+#include <iostream>
 // Here you can set the device ID that was assigned to you
 #define MYDEVICE 0
 __global__
@@ -15,23 +16,19 @@ int main(void)
   // 1<<N is the equivalent to 2^N
   unsigned int N = 20 * (1 << 20);
   double *x, *y, *d_x, *d_y;
-  x = (double*)malloc(N*sizeof(double));
-  y = (double*)malloc(N*sizeof(double));
+  std::vector<double> x(N, 1.);
+  std::vector<double> y(N, 2.);
 
   cudaMalloc(&d_x, N*sizeof(double)); 
   cudaMalloc(&d_y, N*sizeof(double));
 
-  for (unsigned int i = 0; i < N; i++) {
-    x[i] = 1.0;
-    y[i] = 2.0;
-  }
 
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
 
-  cudaMemcpy(d_x, x, N*sizeof(double), cudaMemcpyHostToDevice);
-  cudaMemcpy(d_y, y, N*sizeof(double), cudaMemcpyHostToDevice);
+  cudaMemcpy(d_x, x.data(), N*sizeof(double), cudaMemcpyHostToDevice);
+  cudaMemcpy(d_y, y.data(), N*sizeof(double), cudaMemcpyHostToDevice);
 
   cudaEventRecord(start);
 
@@ -39,7 +36,7 @@ int main(void)
 
   cudaEventRecord(stop);
 
-  cudaMemcpy(y, d_y, N*sizeof(double), cudaMemcpyDeviceToHost);
+  cudaMemcpy(y.data(), d_y, N*sizeof(double), cudaMemcpyDeviceToHost);
 
   cudaEventSynchronize(stop);
 
@@ -54,9 +51,6 @@ int main(void)
   
   cudaFree(d_x);
   cudaFree(d_y);
-  free(x);
-  free(y);
-
 }
 
 
