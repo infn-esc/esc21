@@ -20,15 +20,6 @@ menu:
       label: Discover Hardware Architecture
     - name: perf
       label: Profiling using "perf"
-  - name: memory
-    label: MEMORY
-    items:
-    - name: memoryMonitoring
-      label: Memory Monitoring Tools
-    - name: MemoryAbuse
-      label: Memory Abuses
-    - name: DataLocality
-      label: Data Locality
   - name: cpp
     label: C++
     items:
@@ -38,8 +29,12 @@ menu:
       label: Memory issues
     - name: pointers
       label: Managing resources
-    - name: move
-      label: Move
+    - name: move_ops
+      label: Move operations
+    - name: rvo
+      label: Return Value Optimization
+    - name: layout
+      label: Data layout in memory
     - name: containers
       label: Containers
     - name: compiletime
