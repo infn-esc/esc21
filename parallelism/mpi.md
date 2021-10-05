@@ -7,58 +7,65 @@ section: parallelism
 Some of you are sharing the same machine and some time measurements can be influenced by other users running at the very same moment. It can be necessary to run time measurements multiple times. Offloading tasks for your intelligence to Google and Stackoverflow many times is a very good idea, but not this week. Try not to use it.
 
 Append the following to your `.bashrc` file in your home folder
-~~~
+```bash
 # .bashrc
 # Source global definitions
 if [ -f /etc/bashrc ]; then
         . /etc/bashrc
 fi
-
-module load compilers/cuda-10.0
-module load compilers/gcc-7.3.0_sl7
+module load compilers/gcc-9.2.0_sl7
 export PATH=/usr/lib64/openmpi/bin/:$PATH
 export LD_LIBRARY_PATH=/usr/lib64/openmpi/lib:$LD_LIBRARY_PATH
-~~~
+```
 
 make sure that `.bashrc` is sourced  at login by appending the following to the `.bash_profile`:
-~~~
+```bash
 
 # .bash_profile
 # Get the aliases and functions
 if [ -f ~/.bashrc ]; then
         . ~/.bashrc
 fi
-~~~
+```
 
 Check that your environment is correctly configured to compile and runMPI code by running
-~~~
-$ mpic++ -v
-[...]
-gcc version 7.3.0 (GCC)
+```bash
+module load compilers/gcc-9.2.0_sl7
+
+mpic++ -v
+g++ (GCC) 9.2.0
+Copyright (C) 2019 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 $ which mpirun
 /usr/lib64/openmpi/bin/mpirun
 ~~~
 
 Create a file `hostfile.txt` with the following data:
-~~~
-hpc-200-06-05 slots=1
-hpc-200-06-06 slots=1
-~~~
+```
+hpc-200-06-18 slots=2
+hpc-200-06-17 slots=2
+hpc-200-06-05 slots=2
+hpc-200-06-06 slots=2
+```
 
 To compile your application you will use `mpic++` just like if it was g++ (it actually IS g++).
+```
+mpic++ mpi_helloworld.cpp -o mpi_helloworld
+```
 
 To execute your application you will use `mpirun`.
 
-If I want to run my application `hello` located in `/home/felice` using 8 processes I will need to run:
-~~~
-mpirun -np 2 --hostfile hostfile.txt /home/felice/hello
-~~~
+If I want to run my application `hello` located in `/home/HPC/fpantaleohpc/` using 6 processes I will need to run:
+```
+mpirun -np 6 --hostfile hostfile.txt /home/HPC/fpantaleohpc/mpi_helloworld
+```
 
 
 ### Hello World!
 
-```cpp
+```C++
 #include <mpi.h>
 #include <iostream>
 int main(int argc, char** argv) {
