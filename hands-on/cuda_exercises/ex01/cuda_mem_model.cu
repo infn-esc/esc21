@@ -35,6 +35,8 @@ int main()
     cudaMalloc(  );
 
     // Part 2 of 5: host to device memory copy
+    // Hint: the raw pointer to the underlying array of a vector 
+    // can be obtained by calling std::vector<T>::data()
     cudaMemcpy(  );
 
     // Part 3 of 5: device to device memory copy
