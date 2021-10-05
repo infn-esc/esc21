@@ -69,6 +69,8 @@ int main( int argc, char** argv)
     // If the program makes it this far, then the results are correct and
     // there are no run-time errors.  Good work!
     std::cout << "Correct!" << std::endl;
+
+    return 0;
 }
 
 void checkCUDAError(const char *msg)
