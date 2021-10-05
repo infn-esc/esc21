@@ -23,26 +23,12 @@ void make_vector_out(std::vector<int>& result, int N, std::function<int()> gen)
   std::generate_n(std::back_inserter(result), N, gen);
 }
 
-std::vector<int> make_vector_norvo(int N, std::function<int()> gen)
-{
-  if (N == 0) {
-    return std::vector<int>{};
-  } else {
-    std::vector<int> result;
-
-    result.reserve(N);
-    std::generate_n(std::back_inserter(result), N, gen);
-
-    return result;
-  }
-}
-
 int main(int argc, char* argv[])
 {
   int const N = (argc > 1) ? std::atoi(argv[1]) : 100'000'000;
 
   std::random_device rd;
-  std::mt19937 eng{rd()};
+  std::default_random_engine eng{rd()};
 
   int const MAX_N = 100;
   std::uniform_int_distribution<int> dist{1, MAX_N};
@@ -50,28 +36,19 @@ int main(int argc, char* argv[])
   std::function<int()> gen = [&]{ return dist(eng); };
 
   {
-    auto t0 = std::chrono::high_resolution_clock::now();
+    auto t0 = std::chrono::steady_clock::now();
     std::vector<int> v = make_vector_rvo(N, gen);
-    auto t1 = std::chrono::high_resolution_clock::now();
+    auto t1 = std::chrono::steady_clock::now();
     std::cout << "rvo: " << N << " random ints in "
               << std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count()
               << " ms\n";
   }
 
   {
-    auto t0 = std::chrono::high_resolution_clock::now();
-    std::vector<int> v = make_vector_norvo(N, gen);
-    auto t1 = std::chrono::high_resolution_clock::now();
-    std::cout << "no rvo: " << N << " random ints in "
-              << std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count()
-              << " ms\n";
-  }
-
-  {
-    auto t0 = std::chrono::high_resolution_clock::now();
+    auto t0 = std::chrono::steady_clock::now();
     std::vector<int> v;
     make_vector_out(v, N, gen);
-    auto t1 = std::chrono::high_resolution_clock::now();
+    auto t1 = std::chrono::steady_clock::now();
     std::cout << "out: " << N << " random ints in "
               << std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count()
               << " ms\n";
