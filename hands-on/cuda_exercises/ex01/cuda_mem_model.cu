@@ -1,6 +1,7 @@
 // includes, system
 #include <iostream>
-#include <assert.h>
+#include <cassert>
+#include <vector>
 
 // Here you can set the device ID that was assigned to you
 #define MYDEVICE 0
@@ -16,15 +17,13 @@ int main()
     cudaSetDevice(MYDEVICE);
     // pointer and dimension for host memory
     int dimA = 8;
-    float *h_a;
+    std::vector<float> h_a(dimA);
+
 
     // pointers for device memory
     float *d_a, *d_b;
 
-    // allocate and initialize host memory
-    // Bonus: try using cudaMallocHost in place of malloc
-    // it has the same syntax as cudaMalloc, but it enables asynchronous copies
-    h_a = (float *) malloc(dimA*sizeof(float));
+    // allocate and initialize host memory    
     for (int i = 0; i<dimA; ++i)
     {
         h_a[i] = i;
@@ -42,10 +41,7 @@ int main()
     cudaMemcpy(  );
 
     // clear host memory
-    for (int i=0; i<dimA; ++i )
-    {
-        h_a[i] = 0.f;
-    }
+    std::fill(h_a.begin(), h_a.end(), 0);
 
     // Part 4 of 5: device to host copy
     cudaMemcpy(  );
@@ -66,10 +62,7 @@ int main()
     // Check for any CUDA errors
     checkCUDAError("cudaFree");
 
-    // free host memory pointer h_a
-    free(h_a);
-
-    // If the program makes it this far, then the results are correct and
+     // If the program makes it this far, then the results are correct and
     // there are no run-time errors.  Good work!
     std::cout << "Correct!" << std::endl;
 
