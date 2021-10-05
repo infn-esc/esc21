@@ -56,7 +56,7 @@ int main(void)
   // // Part 1 of 6: copy the result back to the host
   int device_result = 0;
 
-  // std::cout << "Device sum: " << device_result << std::endl;
+  std::cout << "Device sum: " << device_result << std::endl;
 
   // // Part 1 of 6: deallocate device memory
 
