@@ -1,10 +1,11 @@
 #include "mpi.h"
 #include <stdio.h>
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
   int numranks, rank, dest, source, rc, count, tag = 1;
   char inmsg, outmsg = 'x';
-  MPI_Status Stat;  // required variable for receive routines
+  MPI_Status Stat; // required variable for receive routines
   MPI_Init(&argc, &argv);
   MPI_Comm_size(MPI_COMM_WORLD, &numranks);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -20,4 +21,3 @@ int main(int argc, char* argv[]) {
   }
   MPI_Finalize();
 }
-
