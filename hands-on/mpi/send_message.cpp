@@ -1,5 +1,5 @@
-#include <iostream>
 #include "mpi.h"
+#include <iostream>
 
 int main(int argc, char* argv[])
 {
@@ -13,14 +13,16 @@ int main(int argc, char* argv[])
   if (rank == 0) {
     dest = 1;
     MPI_Ssend(&outmsg, 1, MPI_CHAR, dest, tag, MPI_COMM_WORLD);
-    std::cout << "Rank 0 successfully sent a message to Rank 1: " << outmsg << std::endl;
+    std::cout << "Rank 0 successfully sent a message to Rank 1: " << outmsg
+              << std::endl;
   }
   // rank 1 waits for rank 0 message then returns a message
   else if (rank == 1) {
     std::cout << "Rank 1 is waiting for a message from Rank 0" << std::endl;
     source = 0;
     MPI_Recv(&inmsg, 1, MPI_CHAR, source, tag, MPI_COMM_WORLD, &Stat);
-    std::cout << "Rank 1 successfully received a message from Rank 0: " << inmsg << std::endl;
+    std::cout << "Rank 1 successfully received a message from Rank 0: " << inmsg
+              << std::endl;
   }
   MPI_Finalize();
 }

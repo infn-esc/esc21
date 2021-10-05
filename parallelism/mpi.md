@@ -52,14 +52,14 @@ hpc-200-06-06 slots=2
 
 To compile your application you will use `mpic++` just like if it was g++ (it actually IS g++).
 ```
-mpic++ mpi_helloworld.cpp -o mpi_helloworld
+mpic++ helloworld.cpp -o helloworld
 ```
 
 To execute your application you will use `mpirun`.
 
-If I want to run my application `hello` located in `/home/HPC/fpantaleohpc/` using 6 processes I will need to run:
+If I want to run my application `hello` located in `/home/HPC/fpantaleohpc/` using 8 processes I will need to run:
 ```
-mpirun -np 6 --hostfile hostfile.txt /home/HPC/fpantaleohpc/mpi_helloworld
+mpirun -np 8 --hostfile hostfile.txt /home/HPC/fpantaleohpc/esc21/hands-on/mpi/helloworld
 ```
 
 
@@ -84,10 +84,4 @@ int main(int argc, char** argv) {
   MPI_Finalize();
 }
 ```
-
-
-
-
-
-
 
