@@ -263,6 +263,20 @@ Compile with:
 g++ your_first_tbb_program.cpp -ltbb 
 ```
 
+### Your TBB Thread pool
+```C++
+// analogous to hardware_concurrency, number of hw threads:
+int num_threads = oneapi::tbb::info::default_concurrency();
+
+// or if you wish to force a number of threads:
+auto t = 10; //running with 10 threads
+oneapi::tbb::task_arena arena(t);
+
+// And query an arena for the number of threads used:
+auto max = oneapi::tbb::this_task_arena::max_concurrency();
+// Limit the number of threads to two for all oneTBB parallel interfaces
+oneapi::tbb::global_control global_limit(oneapi::tbb::global_control::max_allowed_parallelism, 2);
+```
 
 ### Task parallelism
 
@@ -292,7 +306,7 @@ int Fib(int n) {
 }
 
 int main() {
-  std::cout << Fib(40) << std::endl;
+  std::cout << Fib(32) << std::endl;
   return 0;
 }
 ```
@@ -302,7 +316,7 @@ int main() {
 Generate a direct acyclic graph represented as a `std::vector<Vertex> graph` of 20 vertices:
 ```C++
 struct Vertex {
-  unsigned int N;
+  int N;
   std::vector<int> Neighbors;
 }
 ```
