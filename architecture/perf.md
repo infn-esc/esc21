@@ -49,30 +49,46 @@ happening (godbolt can be of help). Modify the code to make it "branchless".
 
 Use [backend.cpp]({{site.exercises_repo}}/hands-on/architecture/backend.cpp)
 
-compile (`c++ -Wall -g -march=native`) with different compiler options (`-O2,-O3, -Ofast, -funroll-loops`) measure performance,
+compile 
+    
+```bash
+g++ -Wall -g -march=native
+``` 
+with different compiler options (`-O2, -O3, -Ofast, -funroll-loops`) measure performance,
 indentify "hotspot", modify code to speed it up.
 
 You can also try the toplev analysis by: 
-```
+
+```bash
 git clone https://github.com/andikleen/pmu-tools.git
 cd pmu-tools/
 export PATH=$PATH:$(pwd)
 ```
 
-Then run your program with `toplev.py`.
-You can set the affinity of a program by using `taskset`. For example, `taskset -c 0 ./out` will force the program to run on core 0.
+Then run your program with `toplev`.
+You can set the affinity of a program by using `taskset`. 
+For example, 
+
+```bash
+taskset -c 0 ./out
 ```
-toplev.py --single-thread ./out
+
+will force the program to run on core 0.
+
+```bash
+toplev --single-thread ./out
 ```
 or 
-```
-toplev.py --all --core C0 taskset -c 0,1 program
+
+```bash
+toplev --all --core C0 taskset -c 0,1 program
 ```
 
-A wrapper defining more user-friedly name for INTEL counters can be downloaded as part of `pmu-tools`
+A wrapper defining more user-friedly name for INTEL counters can be downloaded as part of `pmu-tools`.
 
 Try:
-```
+
+```bash
 ocperf.py list
 ```
 
@@ -89,13 +105,31 @@ http://www.cs.technion.ac.il/~erangi/TMA_using_Linux_perf__Ahmad_Yasin.pdf
 
 ## Further information
 
-For large applications more details can be obtained running ``perf record``  that will produce a file containing all sampled events and their location in the application.
-``perf record  --call-graph=dwarf`` will produce a full call-graph. On more recent Intel hardware (since Haswell)
-one can use ``perf record  --call-graph=lbr`` which is faster and produces a more compact report.
-``perf report`` can be used to display the detailed profile.
-To identify performance "hotspot" at code level compile with "-g" and "perf report" will interleave source code with assembler.
+For large applications more details can be obtained running 
+```bash
+perf record
+```
 
-perf record/report is well documented in
+that will produce a file containing all sampled events and their location in the application.
+
+```bash
+perf record  --call-graph=dwarf
+``` 
+will produce a full call-graph. On more recent Intel hardware (since Haswell)
+one can use 
+
+```bash
+perf record  --call-graph=lbr
+```
+
+which is faster and produces a more compact report.
+```bash
+perf report
+```
+can be used to display the detailed profile.
+To identify performance "hotspot" at code level compile with `-g` and `perf report` will interleave source code with assembler.
+
+`perf record/report` is well documented in
 https://perf.wiki.kernel.org/index.php/Tutorial#Sample_analysis_with_perf_report
 
 an interesting reading is also
