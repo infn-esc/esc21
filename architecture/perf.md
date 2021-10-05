@@ -84,6 +84,10 @@ or
 toplev --all --core C0 taskset -c 0,1 program
 ```
 
+![](ivb-hierarchy.svg){:height="400px" }.
+
+
+
 A wrapper defining more user-friedly name for INTEL counters can be downloaded as part of `pmu-tools`.
 
 Try:
