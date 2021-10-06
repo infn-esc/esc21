@@ -1,9 +1,9 @@
 // compile with
 //  c++ -O2 -Wall -Wextra virtual.cpp
 //
+//  * use adhoc RTTI with -DADHOC_RTTI
 //  * comment out the random
 //  * try to change the "pattern" in the vector of pointers
-//  * use adhoc RTTI with -DADHOC_RTTI
 //  * remove "final"
 
 #include <algorithm>
