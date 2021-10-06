@@ -186,6 +186,7 @@ To compile and link:
 g++ -O2 algo_par.cpp  -ltbb
 ```
 Let's check that you can compile a simple tbb program:
+
 ```C++
 #include <cstdint>
 #include <oneapi/tbb.h>
