@@ -28,7 +28,7 @@ int main()
   // allocate memory on the device
   cudaMalloc();
 
-  if (NULL == h_a || NULL == d_a) {
+  if (NULL == d_a) {
     std::cerr << "couldn't allocate memory" << std::endl;
     return 1;
   }
