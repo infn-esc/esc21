@@ -98,6 +98,10 @@ regard to header files and compiler flags:
 3. You also need to tell `nvcc` where to find the boost header files: add `-I ${BOOST_ROOT}/include` to the command line.
 4. `nvcc` will produce a lot of (harmless) warnings when encountering the alpaka header files. Silence these warnings by passing this
    additional flag on the compiler command line: `-Xcudafe=--diag_suppress=esa_on_defaulted_function_ignored`.
+4. The compiler command line should look similar to this:
+   ```bash
+   $ nvcc -std=c++14 -arch sm_70 -Ialpaka/include/ -I$BOOST_ROOT/include/ --expt-relaxed-constexpr --expt-extended-lambda
+   ```
 
 ### Exercise 1. Modifying the computePi problem size.
 
