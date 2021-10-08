@@ -14,9 +14,7 @@ $ cd esc21/hands-on/alpaka_exercises
 
 Check that your environment is correctly configured to compile CUDA code by running:
 ```bash
-module load compilers/gcc-9.2.0_sl7
-export PATH=/usr/local/cuda-11.2/bin:$PATH
-export LD_LIBRARY_PATH=/usr/local/cuda-11.2/lib64:$LD_LIBRARY_PATH
+module load compilers/gcc-9.2.0_sl7 boost_1_77_0_gcc8 compilers/cuda-11.2
 $ nvcc --version
  nvcc: NVIDIA (R) Cuda compiler driver
  Copyright (c) 2005-2020 NVIDIA Corporation
@@ -97,7 +95,8 @@ regard to header files and compiler flags:
 2. You must tell `nvcc` where to find the alpaka header files you downloaded. This is done with the following compiler flag:
    `-I/path/to/your/copy/of/alpaka/include`. Note the trailing `/include` - this is a subdirectory of the alpaka directory
    you downloaded. It is important that `/include` is not omitted!
-3. `nvcc` will produce a lot of (harmless) warnings when encountering the alpaka header files. Silence these warnings by passing this
+3. You also need to tell `nvcc` where to find the boost header files: add `-I ${BOOST_ROOT}/include` to the command line.
+4. `nvcc` will produce a lot of (harmless) warnings when encountering the alpaka header files. Silence these warnings by passing this
    additional flag on the compiler command line: `-Xcudafe=--diag_suppress=esa_on_defaulted_function_ignored`.
 
 ### Exercise 1. Modifying the computePi problem size.
