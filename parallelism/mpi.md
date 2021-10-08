@@ -40,7 +40,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 $ which mpirun
 /usr/lib64/openmpi/bin/mpirun
-~~~
+```
 
 Create a file `hostfile.txt` with the following data:
 ```
