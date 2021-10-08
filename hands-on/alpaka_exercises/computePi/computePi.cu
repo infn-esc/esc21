@@ -175,7 +175,7 @@ int main() {
     // Wait until all operations in the queue are finished.
     // This call is redundant for a blocking queue
     // Here use alpaka:: because of an issue on macOS
-    wait(queue);
+    alpaka::wait(queue);
 
     // Compute Pi on host
     std::uint32_t P = 0;
