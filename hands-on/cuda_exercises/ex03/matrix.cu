@@ -28,11 +28,6 @@ int main()
   // allocate memory on the device
   cudaMalloc();
 
-  if (NULL == h_a || NULL == d_a) {
-    std::cerr << "couldn't allocate memory" << std::endl;
-    return 1;
-  }
-
   // Part 2 of 4: define grid and block size and launch the kernel
   dim3 grid, block;
   block.x = ;
