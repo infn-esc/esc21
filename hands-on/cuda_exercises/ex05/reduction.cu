@@ -11,7 +11,7 @@ __global__ void block_sum(const int* input, int* per_block_results,
                           const size_t n)
 {
   // fill me
-  __shared__ int sdata[10];
+  __shared__ int sdata[choose_your_favorite_size_here];
 }
 
 ////////////////////////////////////////////////////////////////////////////////

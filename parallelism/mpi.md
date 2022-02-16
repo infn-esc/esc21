@@ -40,14 +40,14 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 $ which mpirun
 /usr/lib64/openmpi/bin/mpirun
-~~~
+```
 
 Create a file `hostfile.txt` with the following data:
 ```
-hpc-200-06-18 slots=2
-hpc-200-06-17 slots=2
-hpc-200-06-05 slots=2
-hpc-200-06-06 slots=2
+hpc-200-06-18 slots=1
+hpc-200-06-17 slots=1
+hpc-200-06-05 slots=1
+hpc-200-06-06 slots=1
 ```
 
 To compile your application you will use `mpic++` just like if it was g++ (it actually IS g++).
